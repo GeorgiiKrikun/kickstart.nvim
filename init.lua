@@ -399,11 +399,11 @@ require('lazy').setup({
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
         --
-        -- defaults = {
-        --   mappings = {
-        --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-        --   },
-        -- },
+        defaults = {
+          file_ignore_patterns = {
+            'build/',
+          },
+        },
         -- pickers = {}
         extensions = {
           ['ui-select'] = {
@@ -954,6 +954,22 @@ require('lazy').setup({
     --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
     --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+  },
+
+  {
+    'github/copilot.vim',
+    lazy = false,
+    --vim.keymap.set('i', '<C-J>', 'copilot#Accept("\\<CR>")', {
+    --  expr = true,
+    --  replace_keycodes = false
+    --}),
+    --vim.g.copilot_no_tab_map = true,
+  },
+  {
+    'mfussenegger/nvim-dap',
+  },
+  {
+    'sakhnik/nvim-gdb',
   },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
