@@ -169,7 +169,83 @@ vim.opt.confirm = true
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 -- Diagnostic keymaps
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+--vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Set diagnostic [Q]uickfix list' })
+vim.keymap.set('n', '<leader>Q', vim.cmd.copen, { desc = 'Open diagnostic [Q]uickfix window' })
+vim.keymap.set('n', '<leader>C', vim.cmd.cclose, { desc = 'Close diagnostic [C]lose window' })
+--vim.diagnostic.config {
+--  virtual_text = true, -- Enable virtual text
+--  signs = true, -- Show signs in the sign column (errors, warnings, etc.)
+--  underline = true, -- Underline diagnostic text
+--  update_in_insert = false, -- Update diagnostics while in insert mode (can be resource-intensive)
+--  float = {
+--    border = 'rounded',
+--  },
+--}
+--vim.diagnostic.config {
+-- ... other settings ...
+--  virtual_text = {
+--  source = 'if_many',
+--    spacing = 2,
+--  format = function(diagnostic)
+--      return diagnostic.message -- Always display the full message
+--  end,
+--  },
+--underline = { severity = vim.diagnostic.severity.HINT }, -- or vim.diagnostic.severity.HINT
+--  float = {
+--  border = 'rounded',
+--    source = 'always', -- Show the source of the diagnostic
+--  format = function(diagnostic)
+--      local message = diagnostic.message
+--    if diagnostic.source then
+--        message = message .. ' (' .. diagnostic.source .. ')' -- Append source to the message
+--    end
+--      if diagnostic.code then
+--      message = message .. ' [Code: ' .. diagnostic.code .. ']' -- Append error code to the message
+--      end
+--    return message
+--    end,
+--},
+--  -- ... other settings ...
+--}
+
+vim.diagnostic.config {
+  -- ... other settings ...
+  float = {
+    border = 'rounded',
+    source = 'always',
+    format = function(diagnostic)
+      local message = vim.lsp.util.convert_input_to_markdown_lines(diagnostic.message)
+      if diagnostic.source then
+        table.insert(message, '')
+        table.insert(message, '(' .. diagnostic.source .. ')')
+      end
+      if diagnostic.code then
+        table.insert(message, '')
+        table.insert(message, '[Code: ' .. diagnostic.code .. ']')
+      end
+      return table.concat(message, '\n')
+    end,
+  },
+  virtual_text = {
+    source = 'if_many',
+    spacing = 2,
+    format = function(diagnostic)
+      local message = vim.lsp.util.convert_input_to_markdown_lines(diagnostic.message)
+      if diagnostic.source then
+        table.insert(message, '')
+        table.insert(message, '(' .. diagnostic.source .. ')')
+      end
+      if diagnostic.code then
+        table.insert(message, '')
+        table.insert(message, '[Code: ' .. diagnostic.code .. ']')
+      end
+      return table.concat(message, ' ')
+    end,
+  },
+  -- ... other settings ...
+}
+vim.keymap.set('n', 'gl', vim.diagnostic.open_float, { desc = 'Show diagnostic [L]ine' })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
