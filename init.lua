@@ -163,7 +163,7 @@ vim.opt.confirm = true
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
-
+vim.keymap.set('n', '<leader>H', ':ClangdSwitchSourceHeader<CR>', { desc = 'Switch Header/Source' })
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
@@ -173,6 +173,14 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Set diagnostic [Q]uickfix list' })
 vim.keymap.set('n', '<leader>Q', vim.cmd.copen, { desc = 'Open diagnostic [Q]uickfix window' })
 vim.keymap.set('n', '<leader>C', vim.cmd.cclose, { desc = 'Close diagnostic [C]lose window' })
+
+vim.keymap.set('i', '<C-J>', 'copilot#Accept("\\<CR>")', {
+  expr = true,
+  replace_keycodes = false,
+})
+vim.g.copilot_no_tab_map = true
+vim.keymap.set('i', '<C-L>', '<Plug>(copilot-accept-word)')
+
 --vim.diagnostic.config {
 --  virtual_text = true, -- Enable virtual text
 --  signs = true, -- Show signs in the sign column (errors, warnings, etc.)
@@ -287,6 +295,38 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
   callback = function()
     vim.highlight.on_yank()
+  end,
+})
+
+-- Enable hybrid numbers
+vim.opt.number = true -- Enable absolute line numbers
+vim.opt.relativenumber = true -- Enable relative line numbers
+
+vim.api.nvim_create_autocmd('WinEnter', {
+  callback = function()
+    vim.opt_local.number = true
+    vim.opt_local.relativenumber = true
+  end,
+})
+
+vim.api.nvim_create_autocmd('BufEnter', {
+  callback = function()
+    vim.opt_local.number = true
+    vim.opt_local.relativenumber = true
+  end,
+})
+
+vim.api.nvim_create_autocmd('CmdwinEnter', {
+  callback = function()
+    vim.opt_local.number = false
+    vim.opt_local.relativenumber = false
+  end,
+})
+
+vim.api.nvim_create_autocmd('TermOpen', {
+  callback = function()
+    vim.opt_local.number = false
+    vim.opt_local.relativenumber = false
   end,
 })
 
