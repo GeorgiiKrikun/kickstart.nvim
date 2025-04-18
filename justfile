@@ -1,7 +1,6 @@
 default:
   just --list
 
-
 install-ripgrep:
   curl -LO https://github.com/BurntSushi/ripgrep/releases/download/14.1.0/ripgrep_14.1.0-1_amd64.deb
   mkdir -p ${HOME}/Downloads
@@ -28,3 +27,17 @@ install-nerd-font:
   unzip DejaVuSansMono.zip
   rm DejaVuSansMono.zip
 
+install-nerd-font-kitty:
+  #!/bin/bash
+  set -ex
+  grep font_family DejaVuSansMNerdFont ${HOME}/.config/kitty/kitty.conf || echo "font_family DejaVuSansMono Nerd Font" >> ${HOME}/.config/kitty/kitty.conf
+
+install-njs:
+  #!/bin/bash
+  cd ${HOME}/Downloads
+  wget https://nodejs.org/download/release/latest-v23.x/node-v23.11.0-linux-x64.tar.gz
+  tar -xzf node-v23.11.0-linux-x64.tar.gz
+  sudo cp -r node-v23.11.0-linux-x64/bin/* /usr/bin/ 
+  sudo cp -r node-v23.11.0-linux-x64/lib/* /usr/lib/ 
+  sudo cp -r node-v23.11.0-linux-x64/include/* /usr/include/ 
+  sudo cp -r node-v23.11.0-linux-x64/share/* /usr/share/ 
