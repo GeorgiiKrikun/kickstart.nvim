@@ -1,88 +1,14 @@
---[[
+local log_file = vim.fn.expand '~/.nvim_local_config_log' -- Choose your log file path
 
-=====================================================================
-==================== READ THIS BEFORE CONTINUING ====================
-=====================================================================
-========                                    .-----.          ========
-========         .----------------------.   | === |          ========
-========         |.-""""""""""""""""""-.|   |-----|          ========
-========         ||                    ||   | === |          ========
-========         ||   KICKSTART.NVIM   ||   |-----|          ========
-========         ||                    ||   | === |          ========
-========         ||                    ||   |-----|          ========
-========         ||:Tutor              ||   |:::::|          ========
-========         |'-..................-'|   |____o|          ========
-========         `"")----------------(""`   ___________      ========
-========        /::::::::::|  |::::::::::\  \ no mouse \     ========
-========       /:::========|  |==hjkl==:::\  \ required \    ========
-========      '""""""""""""'  '""""""""""""'  '""""""""""'   ========
-========                                                     ========
-=====================================================================
-=====================================================================
+local function log_message(message)
+  local file = io.open(log_file, 'a')
+  if file then
+    file:write(os.date '%Y-%m-%d %H:%M:%S' .. ' - ' .. message .. '\n')
+    file:close()
+  end
+end
 
-What is Kickstart?
-
-  Kickstart.nvim is *not* a distribution.
-
-  Kickstart.nvim is a starting point for your own configuration.
-    The goal is that you can read every line of code, top-to-bottom, understand
-    what your configuration is doing, and modify it to suit your needs.
-
-    Once you've done that, you can start exploring, configuring and tinkering to
-    make Neovim your own! That might mean leaving Kickstart just the way it is for a while
-    or immediately breaking it into modular pieces. It's up to you!
-
-    If you don't know anything about Lua, I recommend taking some time to read through
-    a guide. One possible example which will only take 10-15 minutes:
-      - https://learnxinyminutes.com/docs/lua/
-
-    After understanding a bit more about Lua, you can use `:help lua-guide` as a
-    reference for how Neovim integrates Lua.
-    - :help lua-guide
-    - (or HTML version): https://neovim.io/doc/user/lua-guide.html
-
-Kickstart Guide:
-
-  TODO: The very first thing you should do is to run the command `:Tutor` in Neovim.
-
-    If you don't know what this means, type the following:
-      - <escape key>
-      - :
-      - Tutor
-      - <enter key>
-
-    (If you already know the Neovim basics, you can skip this step.)
-
-  Once you've completed that, you can continue working through **AND READING** the rest
-  of the kickstart init.lua.
-
-  Next, run AND READ `:help`.
-    This will open up a help window with some basic information
-    about reading, navigating and searching the builtin help documentation.
-
-    This should be the first place you go to look when you're stuck or confused
-    with something. It's one of my favorite Neovim features.
-
-    MOST IMPORTANTLY, we provide a keymap "<space>sh" to [s]earch the [h]elp documentation,
-    which is very useful when you're not exactly sure of what you're looking for.
-
-  I have left several `:help X` comments throughout the init.lua
-    These are hints about where to find more information about the relevant settings,
-    plugins or Neovim features used in Kickstart.
-
-   NOTE: Look for lines like this
-
-    Throughout the file. These are for you, the reader, to help you understand what is happening.
-    Feel free to delete them once you know what you're doing, but they should serve as a guide
-    for when you are first encountering a few different constructs in your Neovim config.
-
-If you experience any errors while trying to install kickstart, run `:checkhealth` for more info.
-
-I hope you enjoy your Neovim journey,
-- TJ
-
-P.S. You can delete this when you're done too. It's your config now! :)
---]]
+log_message 'Starting Neovim configuration...'
 
 -- Set <space> as the leader key
 -- See `:help mapleader`
@@ -180,42 +106,32 @@ vim.keymap.set('i', '<C-J>', 'copilot#Accept("\\<CR>")', {
 })
 vim.g.copilot_no_tab_map = true
 vim.keymap.set('i', '<C-L>', '<Plug>(copilot-accept-word)')
+-- Evaluate the word or range under the cursor LLDB/GDB
+--
+vim.keymap.set('n', '<leader>de', ':GdbEvalWord<CR>', { desc = 'Evaluate word under cursor' })
+vim.keymap.set('v', '<leader>de', ':GdbEvalRange<CR>', { desc = 'Evaluate range under cursor' })
 
---vim.diagnostic.config {
---  virtual_text = true, -- Enable virtual text
---  signs = true, -- Show signs in the sign column (errors, warnings, etc.)
---  underline = true, -- Underline diagnostic text
---  update_in_insert = false, -- Update diagnostics while in insert mode (can be resource-intensive)
---  float = {
---    border = 'rounded',
---  },
---}
---vim.diagnostic.config {
--- ... other settings ...
---  virtual_text = {
---  source = 'if_many',
---    spacing = 2,
---  format = function(diagnostic)
---      return diagnostic.message -- Always display the full message
---  end,
---  },
---underline = { severity = vim.diagnostic.severity.HINT }, -- or vim.diagnostic.severity.HINT
---  float = {
---  border = 'rounded',
---    source = 'always', -- Show the source of the diagnostic
---  format = function(diagnostic)
---      local message = diagnostic.message
---    if diagnostic.source then
---        message = message .. ' (' .. diagnostic.source .. ')' -- Append source to the message
---    end
---      if diagnostic.code then
---      message = message .. ' [Code: ' .. diagnostic.code .. ']' -- Append error code to the message
---      end
---    return message
---    end,
---},
---  -- ... other settings ...
---}
+require 'local_config'
+
+vim.api.nvim_create_autocmd('VimEnter', {
+  once = true,
+  callback = function()
+    local cwd = vim.fn.getcwd()
+    log_message('Vim started in: ' .. cwd)
+    local custom_lua = cwd .. '/.nvim/custom.lua'
+    if vim.fn.filereadable(custom_lua) == 1 then
+      log_message('Loading custom lua file: ' .. custom_lua)
+      dofile(custom_lua)
+    end
+    --require(commands_file_path)
+    --    local file = read_file(commands_file_path)
+    --    if file == nil then
+    --      log_message('File not found: ' .. commands_file_path)
+    --      return
+    --    end
+    --    log_message('File content: ' .. file)
+  end,
+})
 
 vim.diagnostic.config {
   -- ... other settings ...
