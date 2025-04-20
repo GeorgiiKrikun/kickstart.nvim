@@ -41,3 +41,6 @@ install-njs:
   sudo cp -r node-v23.11.0-linux-x64/lib/* /usr/lib/ 
   sudo cp -r node-v23.11.0-linux-x64/include/* /usr/include/ 
   sudo cp -r node-v23.11.0-linux-x64/share/* /usr/share/ 
+
+install-rust:
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
