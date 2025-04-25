@@ -50,6 +50,9 @@ vim.opt.breakindent = true
 -- Save undo history
 vim.opt.undofile = true
 
+-- Set default foldmethod to indent
+vim.opt.foldmethod = 'indent'
+
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
@@ -93,6 +96,9 @@ vim.keymap.set('n', '<leader>H', ':ClangdSwitchSourceHeader<CR>', { desc = 'Swit
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+
+--close and delete the current buffer
+vim.keymap.set('n', '<C-w>bd', ':bd<CR>', { desc = 'Close and delete current buffer' })
 
 -- Diagnostic keymaps
 --vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
@@ -377,6 +383,9 @@ require('lazy').setup({
       },
     },
   },
+  {
+    'skywind3000/asyncrun.vim',
+  },
 
   -- NOTE: Plugins can specify dependencies.
   --
@@ -486,6 +495,12 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sn', function()
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
       end, { desc = '[S]earch [N]eovim files' })
+    end,
+  }, -- using packer.nvim
+  {
+    'nmac427/guess-indent.nvim',
+    config = function()
+      require('guess-indent').setup {}
     end,
   },
 
@@ -924,6 +939,7 @@ require('lazy').setup({
       vim.cmd.colorscheme 'tokyonight-night'
     end,
   },
+  { 'miikanissi/modus-themes.nvim', priority = 1000 },
 
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
@@ -1005,6 +1021,9 @@ require('lazy').setup({
   },
   {
     'sakhnik/nvim-gdb',
+    config = function()
+      vim.keymap.set('n', '<leader>dr', ':GdbRun<CR>', { desc = '[D]ebug [R]un' })
+    end,
   },
   {
     'nvim-tree/nvim-tree.lua',
