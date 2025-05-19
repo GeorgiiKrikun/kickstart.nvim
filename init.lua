@@ -99,6 +99,13 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 --close and delete the current buffer
 vim.keymap.set('n', '<C-w>bd', ':bd<CR>', { desc = 'Close and delete current buffer' })
 
+-- Delete the selection without yanking it
+vim.keymap.set('n', 'D', '"_d', { desc = 'Delete without yanking' })
+vim.keymap.set('v', 'D', '"_d', { desc = 'Delete without yanking (visual mode)' })
+
+-- Insert carriage return in normal mode
+vim.keymap.set('n', '<S-CR>', 'i<CR><Esc>', { noremap = true, silent = true })
+
 -- Diagnostic keymaps
 --vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Set diagnostic [Q]uickfix list' })
@@ -315,44 +322,6 @@ require('lazy').setup({
       },
     },
   },
-  -- {
-  --   "yetone/avante.nvim",
-  --   event = "VeryLazy",
-  --   version = false, -- Never set this value to "*"! Never!
-  --   opts = {
-  --     -- add any opts here
-  --     -- for example
-  --     provider = "copilot",
-  --     },
-  -- },
-  -- dependencies = {
-  --   "nvim-treesitter/nvim-treesitter",
-  --   "stevearc/dressing.nvim",
-  --   "nvim-lua/plenary.nvim",
-  --   "MunifTanjim/nui.nvim",
-  --   --- The below dependencies are optional,
-  --   "nvim-telescope/telescope.nvim", -- for file_selector provider telescope
-  --   "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
-  --   "ibhagwan/fzf-lua", -- for file_selector provider fzf
-  --   "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
-  --   "zbirenbaum/copilot.lua", -- for providers='copilot'
-  --   {
-  --     -- support for image pasting
-  --     "HakonHarnes/img-clip.nvim",
-  --     event = "VeryLazy",
-  --     opts = {
-  --       -- recommended settings
-  --       default = {
-  --         embed_image_as_base64 = false,
-  --         prompt_for_file_name = false,
-  --         drag_and_drop = {
-  --           insert_mode = true,
-  --         },
-  --         -- required for Windows users
-  --         use_absolute_path = true,
-  --       },
-  --     },
-  --   },
   --   {
   --     -- Make sure to set this up properly if you have lazy=true
   --     'MeanderingProgrammer/render-markdown.nvim',
@@ -369,6 +338,16 @@ require('lazy').setup({
       -- add any options here
     },
   },
+  -- {
+  --   'kylechui/nvim-surround',
+  --   version = '^3.0.0', -- Use for stability; omit to use `main` branch for the latest features
+  --   Lazy = false,
+  --   config = function()
+  --     require('nvim-surround').setup {
+  --       -- Configuration here, or leave empty to use defaults
+  --     }
+  --   end,
+  -- },
 
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
@@ -437,9 +416,35 @@ require('lazy').setup({
     },
   },
   {
+    'NeogitOrg/neogit',
+    dependencies = {
+      'nvim-lua/plenary.nvim', -- required
+      'sindrets/diffview.nvim', -- optional - Diff integration
+
+      -- Only one of these is needed.
+      'nvim-telescope/telescope.nvim', -- optional
+      'ibhagwan/fzf-lua', -- optional
+      'echasnovski/mini.pick', -- optional
+      'folke/snacks.nvim', -- optional
+    },
+  },
+  {
     'skywind3000/asyncrun.vim',
   },
 
+  -- NOTE: Copilot char neovim
+  {
+    'CopilotC-Nvim/CopilotChat.nvim',
+    dependencies = {
+      { 'github/copilot.vim' }, -- or zbirenbaum/copilot.lua
+      { 'nvim-lua/plenary.nvim', branch = 'master' }, -- for curl, log and async functions
+    },
+    build = 'make tiktoken', -- Only on MacOS or Linux
+    opts = {
+      -- See Configuration section for options
+    },
+    -- See Commands section for default commands if you want to lazy load on them
+  },
   -- NOTE: Plugins can specify dependencies.
   --
   -- The dependencies are proper plugin specifications as well - anything
@@ -1010,9 +1015,8 @@ require('lazy').setup({
       --  - yinq - [Y]ank [I]nside [N]ext [Q]uote
       --  - ci'  - [C]hange [I]nside [']quote
       require('mini.ai').setup { n_lines = 500 }
-
-      -- Add/delete/replace surroundings (brackets, quotes, etc.)
-      --
+      -- Hello world
+      -- Add/delete/replace urroundings (brackets, quotes, etc.)
       -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
       -- - sd'   - [S]urround [D]elete [']quotes
       -- - sr)'  - [S]urround [R]eplace [)] [']
@@ -1119,6 +1123,12 @@ require('lazy').setup({
   -- Or use telescope!
   -- In normal mode type `<space>sh` then write `lazy.nvim-plugin`
   -- you can continue same window with `<space>sr` which resumes last telescope search
+  {
+    'nvzone/typr',
+    dependencies = 'nvzone/volt',
+    opts = {},
+    cmd = { 'Typr', 'TyprStats' },
+  },
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
