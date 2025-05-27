@@ -102,10 +102,18 @@ vim.keymap.set('n', '<C-w>bd', ':bd<CR>', { desc = 'Close and delete current buf
 -- Delete the selection without yanking it
 vim.keymap.set('n', 'D', '"_d', { desc = 'Delete without yanking' })
 vim.keymap.set('v', 'D', '"_d', { desc = 'Delete without yanking (visual mode)' })
+vim.keymap.set('n', 'X', '"_x', { desc = 'Delete char without yanking' })
+vim.keymap.set('v', 'X', '"_x', { desc = 'Delete char without yanking (visual mode)' })
+vim.keymap.set('n', 'C', '"_c', { desc = 'Replace without yanking' })
+vim.keymap.set('v', 'C', '"_c', { desc = 'Replace without yanking (visual mode)' })
+vim.keymap.set('n', '<leader>ot', ':tabnew | terminal<CR>ibash<CR>', { desc = 'Open terminal in new tab' })
 
 -- Insert carriage return in normal mode
 vim.keymap.set('n', '<S-CR>', 'i<CR><Esc>', { noremap = true, silent = true })
 vim.keymap.set('n', '<M-CR>', 'a<CR><Esc>', { noremap = true, silent = true })
+
+vim.keymap.set('n', 's', 'i <Esc>', { silent = true })
+vim.keymap.set('n', '<M-s>', 'a <Esc>', { noremap = true, silent = true })
 
 -- Open neogit status window
 vim.keymap.set('n', '<leader>gs', ':Neogit<CR>', { desc = 'Open [G]it [S]tatus' })
@@ -116,6 +124,7 @@ vim.keymap.set('n', '<leader>ct', ':CopilotChatToggle<CR>', { desc = '[C]opilot 
 vim.keymap.set('n', '<leader>cd', ':CopilotChatDocs<CR>', { desc = '[C]opilot Chat [D]ocs' })
 vim.keymap.set('n', '<leader>cc', ':CopilotChatCommit<CR>', { desc = '[C]opilot Chat [C]ommit' })
 vim.keymap.set('n', '<leader>ce', ':CopilotChatExplain<CR>', { desc = '[C]opilot Chat [E]xplain' })
+vim.keymap.set('v', '<leader>ce', ":'<,'>CopilotChatExplain<CR>", { desc = '[C]opilot Chat [E]xplain' })
 
 -- Diagnostic keymaps
 --vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
@@ -1014,7 +1023,7 @@ require('lazy').setup({
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-night'
+      vim.cmd.colorscheme 'catppuccin'
     end,
   },
   { 'miikanissi/modus-themes.nvim', priority = 1000 },
