@@ -112,8 +112,7 @@ vim.keymap.set('n', '<leader>ot', ':tabnew | terminal<CR>ibash<CR>', { desc = 'O
 vim.keymap.set('n', '<S-CR>', 'i<CR><Esc>', { noremap = true, silent = true })
 vim.keymap.set('n', '<M-CR>', 'a<CR><Esc>', { noremap = true, silent = true })
 
-vim.keymap.set('n', 's', 'i <Esc>', { silent = true })
-vim.keymap.set('n', '<M-s>', 'a <Esc>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>i', 'i <Esc>', { silent = true })
 
 -- Open neogit status window
 vim.keymap.set('n', '<leader>gs', ':Neogit<CR>', { desc = 'Open [G]it [S]tatus' })
