@@ -106,7 +106,7 @@ vim.keymap.set('n', 'X', '"_x', { desc = 'Delete char without yanking' })
 vim.keymap.set('v', 'X', '"_x', { desc = 'Delete char without yanking (visual mode)' })
 vim.keymap.set('n', 'C', '"_c', { desc = 'Replace without yanking' })
 vim.keymap.set('v', 'C', '"_c', { desc = 'Replace without yanking (visual mode)' })
-vim.keymap.set('n', '<leader>ot', ':tabnew | terminal<CR>ibash<CR>', { desc = 'Open terminal in new tab' })
+vim.keymap.set('n', '<leader>ot', ':tabnew | terminal<CR>izsh<CR>', { desc = 'Open terminal in new tab' })
 
 -- Insert carriage return in normal mode
 vim.keymap.set('n', '<S-CR>', 'i<CR><Esc>', { noremap = true, silent = true })
@@ -141,6 +141,8 @@ vim.keymap.set('i', '<C-L>', '<Plug>(copilot-accept-word)')
 --
 vim.keymap.set('n', '<leader>de', ':GdbEvalWord<CR>', { desc = 'Evaluate word under cursor' })
 vim.keymap.set('v', '<leader>de', ':GdbEvalRange<CR>', { desc = 'Evaluate range under cursor' })
+
+vim.keymap.set('n', '<leader>Ct', ':tabclose<CR>', { desc = '[C]lose current  [T]ab' })
 
 require 'local_config'
 
@@ -1043,7 +1045,7 @@ require('lazy').setup({
       -- Hello world
       -- Add/delete/replace urroundings (brackets, quotes, etc.)
       -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
-      -- - sd'   - [S]urround [D]elete [']quotes
+      -- - sd'  - [S]urround [D]elete [']quotes
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup()
 
@@ -1090,6 +1092,45 @@ require('lazy').setup({
     --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
     --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+    --
+  },
+  {
+    'nvim-treesitter/nvim-treesitter-textobjects',
+    dependencies = {
+      'nvim-treesitter/nvim-treesitter',
+    },
+    config = function()
+      require('nvim-treesitter.configs').setup {
+        textobjects = {
+          select = {
+            enable = true,
+            lookahead = true,
+            keymaps = {
+              ['af'] = '@function.outer',
+              ['if'] = '@function.inner',
+              ['ac'] = '@class.outer',
+              ['ic'] = { query = '@class.inner', desc = 'Select inner part of a class region' },
+              ['as'] = { query = '@local.scope', query_group = 'locals', desc = 'Select language scope' },
+            },
+            selection_modes = {
+              ['@parameter.outer'] = 'v',
+              ['@function.outer'] = 'V',
+              ['@class.outer'] = '<c-v>',
+            },
+            include_surrounding_whitespace = true,
+          },
+          swap = {
+            enable = true,
+            swap_next = {
+              ['<leader>a'] = '@parameter.inner',
+            },
+            swap_previous = {
+              ['<leader>A'] = '@parameter.inner',
+            },
+          },
+        },
+      }
+    end,
   },
 
   {

@@ -35,12 +35,12 @@ install-nerd-font-kitty:
 install-njs:
   #!/bin/bash
   cd ${HOME}/Downloads
-  wget https://nodejs.org/download/release/latest-v23.x/node-v23.11.0-linux-x64.tar.gz
-  tar -xzf node-v23.11.0-linux-x64.tar.gz
-  sudo cp -r node-v23.11.0-linux-x64/bin/* /usr/bin/ 
-  sudo cp -r node-v23.11.0-linux-x64/lib/* /usr/lib/ 
-  sudo cp -r node-v23.11.0-linux-x64/include/* /usr/include/ 
-  sudo cp -r node-v23.11.0-linux-x64/share/* /usr/share/ 
+  wget https://nodejs.org/download/release/latest-v23.x/node-v23.11.1-linux-x64.tar.gz
+  tar -xzf node-v23.11.1-linux-x64.tar.gz
+  sudo cp -r node-v23.11.1-linux-x64/bin/* /usr/bin/ 
+  sudo cp -r node-v23.11.1-linux-x64/lib/* /usr/lib/ 
+  sudo cp -r node-v23.11.1-linux-x64/include/* /usr/include/ 
+  sudo cp -r node-v23.11.1-linux-x64/share/* /usr/share/ 
 
 install-rust:
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
